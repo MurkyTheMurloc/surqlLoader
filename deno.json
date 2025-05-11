@@ -1,0 +1,30 @@
+{
+  "name": "surqlLoader",
+  "version": "0.1.0",
+  "tasks": {
+    "dev": "deno test --watch"
+  },
+  "license": "MIT",
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/path": "jsr:@std/path@^1.0.9",
+    "astro": "npm:astro@^5.7.12"
+  },
+  "exports": {
+    "bun": "./src/bun/bun.ts",
+    "bun/astro": "./src/bun/astro_bun.ts",
+    "deno": "./src/deno/deno.ts",
+    "deno/astro": "./src/deno/astro_deno.ts",
+    "node": "./src/node/node.ts",
+    "node/astro": "./src/node/node.ts"
+  },
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "dom.asynciterable",
+      "deno.ns",
+      "deno.unstable"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "surql-loader",
+  "version": "0.1",
+  "exports": {
+    "bun": "./src/bun/bun.ts",
+    "bun/astro": "./src/bun/astro_bun.ts",
+    "deno": "./src/deno/deno.ts",
+    "deno/astro": "./src/deno/astro_deno.ts",
+    "node": "./src/node/node.ts",
+    "node/astro": "./src/node/node.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.13",
+    "vite": "^6.3.5"
+  }
+}
