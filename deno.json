@@ -7,12 +7,12 @@
   "license": "MIT",
   "imports": {},
   "exports": {
-    "bun": "./src/bun/bun.ts",
-    "bun/astro": "./src/bun/astro_bun.ts",
-    "deno": "./src/deno/deno.ts",
-    "deno/astro": "./src/deno/astro_deno.ts",
-    "node": "./src/node/node.ts",
-    "node/astro": "./src/node/astro_node.ts"
+    "./bun": "./src/bun/bun.ts",
+    "./bun/astro": "./src/bun/astro_bun.ts",
+    "./deno": "./src/deno/deno.ts",
+    "./deno/astro": "./src/deno/astro_deno.ts",
+    "./node": "./src/node/node.ts",
+    "./node/astro": "./src/node/astro_node.ts"
   },
   "compilerOptions": {
     "lib": [
