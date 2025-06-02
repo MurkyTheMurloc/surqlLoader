@@ -1,5 +1,5 @@
 {
-  "name": "surqlLoader",
+  "name": "@surql-loader/loader",
   "version": "0.1.0",
   "tasks": {
     "dev": "deno test --watch"
