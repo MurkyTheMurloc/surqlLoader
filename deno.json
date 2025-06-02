@@ -21,7 +21,6 @@
       "dom.asynciterable",
       "deno.ns",
       "deno.unstable"
-    ],
-    "include": ["./global.d.ts"]
+    ]
   }
 }
