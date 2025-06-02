@@ -13,15 +13,15 @@ Supports:
 
 ## 🌐 Platform Compatibility
 
-| Platform    | Import Path              | Notes              |
-| ----------- | ------------------------ | ------------------ |
-| **Node.js** | `surqlLoader/node/vite`  | Vite plugin        |
-|             | `surqlLoader/node/astro` | Astro integration  |
-| **Deno**    | `surqlLoader/deno/vite`  | Vite plugin        |
-|             | `surqlLoader/deno/astro` | Astro integration  |
-| **Bun**     | `surqlLoader/bun/vite`   | Vite plugin        |
-|             | `surqlLoader/bun/astro`  | Astro integration  |
-| **JSR**     | `@surql-loader/loader`   | Same usage as Deno |
+| Platform    | Import Path               | Notes              |
+| ----------- | ------------------------- | ------------------ |
+| **Node.js** | `surql-loader/node/vite`  | Vite plugin        |
+|             | `surql-loader/node/astro` | Astro integration  |
+| **Deno**    | `surql-loader/deno/vite`  | Vite plugin        |
+|             | `surql-loader/deno/astro` | Astro integration  |
+| **Bun**     | `surql-loader/bun/vite`   | Vite plugin        |
+|             | `surql-loader/bun/astro`  | Astro integration  |
+| **JSR**     | `@surql-loader/loader`    | Same usage as Deno |
 
 ---
 
@@ -43,7 +43,7 @@ deno install jsr:@surql-loader/loader
 ```ts
 // vite.config.ts
 import { defineConfig } from "vite";
-import surqlLoader from "surqlloader/node/vite";
+import surqlLoader from "surql-loader/node/vite";
 
 export default defineConfig({
   plugins: [surqlLoader()],
