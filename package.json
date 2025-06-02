@@ -1,6 +1,6 @@
 {
   "name": "surql-loader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": ".surql file loader for SurrealDB queries in Vite and Astro. Supports Node.js, Deno, Bun",
   "repository": {
