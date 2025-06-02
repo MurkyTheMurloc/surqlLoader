@@ -1,17 +1,16 @@
 import type { AstroIntegration } from "astro";
-import type { Parameter } from "../parameter.ts";
 const decoder = new TextDecoder("utf-8");
-import * as path from "@std/path";
-export default function astroSurql({
-  basePath = "/src",
-}: Parameter): AstroIntegration {
+import { addGlobalTypesToTsConfig } from "../utils.ts";
+import path from "node:path";
+export default function astroSurql(): AstroIntegration {
   return {
     name: "astro:surql",
     hooks: {
       "astro:config:setup": ({ updateConfig, config, logger }) => {
-        // Log start of config setup
-        logger.info(`[astro:surql] configuring .surql loader plugin`); // info-level startup message
-
+        logger.info(`[astro:surql] configuring .surql loader plugin`);
+        const typesFilePath = `${config.root.pathname}deno.json`;
+        console.log("typesFilePath", typesFilePath);
+        addGlobalTypesToTsConfig(typesFilePath, logger);
         updateConfig({
           vite: {
             plugins: [
@@ -20,12 +19,12 @@ export default function astroSurql({
                 enforce: "pre",
                 resolveId(source, importer) {
                   logger.debug(
-                    `[astro:surql][resolveId] source="${source}" importer="${importer}"`,
+                    `[astro:surql][resolveId] source="${source}" importer="${importer}"`
                   );
                   if (source.endsWith(".surql")) {
                     const resolved = path.resolve(
                       path.dirname(importer!),
-                      source,
+                      source
                     );
 
                     return resolved;
@@ -36,17 +35,15 @@ export default function astroSurql({
                     return null;
                   }
                   try {
-                    // Support absolute “/src” imports against project root
-                    const fsPath = id.startsWith(basePath) ? `.${id}` : id;
-                    const content = decoder.decode(Deno.readFileSync(fsPath));
+                    const content = decoder.decode(Deno.readFileSync(id));
                     const trimmed = content.trim();
                     logger.info(
-                      `[astro:surql][load] loaded ${trimmed.length} chars from "${fsPath}"`,
+                      `[astro:surql][load] loaded ${trimmed.length} chars from "${id}"`
                     );
                     return `export default ${JSON.stringify(trimmed)};`;
                   } catch (err: any) {
                     logger.error(
-                      `[astro:surql][load] failed to read "${id}": ${err.message}`,
+                      `[astro:surql][load] failed to read "${id}": ${err.message}`
                     );
                     throw err;
                   }

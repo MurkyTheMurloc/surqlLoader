@@ -1,27 +1,22 @@
 import type { Plugin } from "vite";
-import type { Parameter } from "../parameter.ts";
-export default function surqlPlugin({ basePath = "/src" }: Parameter): Plugin {
+import path from "node:path";
+export default function surqlPlugin(): Plugin {
   return {
     name: "vite:surql-loader",
     enforce: "pre",
 
-    // Resolve “.surql” imports to absolute paths
     resolveId(source, importer) {
-      if (source.endsWith(".surql") && importer) {
-        const resolved = Bun.resolveSync(importer!, source);
-        console.log(`[vite:surql] resolveId "${source}" → "${resolved}"`);
-        return resolved;
+      if (!source.endsWith(".surql")) {
+        return null;
       }
-      return null;
+      return path.resolve(path.dirname(importer!), source);
     },
 
-    // Load and inline the .surql file as a JS string
     async load(id) {
       if (!id.endsWith(".surql")) return null;
 
       try {
-        // If user wrote import "/src/foo.surql", treat that as project-root /src
-        const fsPath = id.startsWith(basePath) ? `.${id}` : id;
+        const fsPath = id;
         const content = Bun.file(fsPath);
         const trimmed = (await content.text()).trim();
         console.log(`[vite:surql] load "${fsPath}" (${trimmed.length} chars)`);

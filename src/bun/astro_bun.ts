@@ -1,15 +1,16 @@
 import type { AstroIntegration } from "astro";
-import type { Parameter } from "../parameter.ts";
-export default function astroSurql({
-  basePath = "/src",
-}: Parameter): AstroIntegration {
+import "../../global.d.ts";
+import path from "node:path";
+import { addGlobalTypesToTsConfig } from "../utils.ts";
+export default function astroSurql(): AstroIntegration {
   return {
     name: "astro:surql",
     hooks: {
       "astro:config:setup": ({ updateConfig, config, logger }) => {
         // Log start of config setup
         logger.info(`[astro:surql] configuring .surql loader plugin`); // info-level startup message
-
+        const typesFilePath = `${config.root.pathname}tsconfig.json`;
+        addGlobalTypesToTsConfig(typesFilePath, logger);
         updateConfig({
           vite: {
             plugins: [
@@ -17,11 +18,10 @@ export default function astroSurql({
                 name: "vite:surql-loader",
                 enforce: "pre",
                 resolveId(source, importer) {
-                  if (source.endsWith(".surql")) {
-                    const resolved = Bun.resolveSync(importer!, source);
-
-                    return resolved;
+                  if (!source.endsWith(".surql")) {
+                    return null;
                   }
+                  return path.resolve(path.dirname(importer!), source);
                 },
                 async load(id) {
                   if (!id.endsWith(".surql")) {
@@ -29,16 +29,16 @@ export default function astroSurql({
                   }
                   try {
                     // Support absolute “/src” imports against project root
-                    const fsPath = id.startsWith(basePath) ? `.${id}` : id;
-                    const content = Bun.file(fsPath);
+                    const content = Bun.file(id);
+                    console.info("content", await content.text());
                     const trimmed = (await content.text()).trim();
                     logger.info(
-                      `[astro:surql][load] loaded ${trimmed.length} chars from "${fsPath}"`,
+                      `[astro:surql][load] loaded ${trimmed.length} chars from "${id}"`
                     );
                     return `export default ${JSON.stringify(trimmed)};`;
                   } catch (err: any) {
                     logger.error(
-                      `[astro:surql][load] failed to read "${id}": ${err.message}`,
+                      `[astro:surql][load] failed to read "${id}": ${err.message}`
                     );
                     throw err;
                   }

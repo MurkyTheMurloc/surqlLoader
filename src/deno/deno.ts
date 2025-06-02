@@ -1,33 +1,24 @@
 import type { Plugin } from "vite";
-import type { Parameter } from "../parameter.ts";
 const decoder = new TextDecoder("utf-8");
-import * as path from "@std/path";
-export default function surqlPlugin({ basePath = "/src" }: Parameter): Plugin {
+import path from "node:path";
+export default function surqlPlugin(): Plugin {
   return {
     name: "vite:surql-loader",
     enforce: "pre",
 
-    // Resolve “.surql” imports to absolute paths
     resolveId(source, importer) {
-      if (source.endsWith(".surql") && importer) {
-        const resolved = path.resolve(path.dirname(importer!), source);
-
-        console.log(`[vite:surql] resolveId "${source}" → "${resolved}"`);
-        return resolved;
+      if (!source.endsWith(".surql")) {
+        return null;
       }
-      return null;
-    },
-
-    // Load and inline the .surql file as a JS string
+      return path.resolve(path.dirname(importer!), source);
+    }, // Load and inline the .surql file as a JS string
     async load(id) {
       if (!id.endsWith(".surql")) return null;
 
       try {
-        // If user wrote import "/src/foo.surql", treat that as project-root /src
-        const fsPath = id.startsWith(basePath) ? `.${id}` : id;
-        const content = decoder.decode(Deno.readFileSync(fsPath));
+        const content = decoder.decode(Deno.readFileSync(id));
         const trimmed = content.trim();
-        console.log(`[vite:surql] load "${fsPath}" (${trimmed.length} chars)`);
+        console.log(`[vite:surql] load "${id}" (${trimmed.length} chars)`);
         return `export default ${JSON.stringify(trimmed)};`;
       } catch (err: any) {
         console.error(`[vite:surql] load error "${id}": ${err.message}`);
