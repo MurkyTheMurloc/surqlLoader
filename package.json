@@ -1,6 +1,6 @@
 {
   "name": "surql-loader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": ".surql file loader for SurrealDB queries in Vite and Astro. Supports Node.js, Deno, Bun",
   "repository": {
@@ -12,12 +12,12 @@
     "build": "tsdown"
   },
   "exports": {
-    "bun/vite": "./src/bun/bun.ts",
-    "bun/astro": "./src/bun/astro_bun.ts",
-    "deno/vite": "./src/deno/deno.ts",
-    "deno/astro": "./src/deno/astro_deno.ts",
-    "node/vite": "./build/node/node.js",
-    "node/astro": "./build/astro_node.js"
+    "./bun/vite": "./src/bun/bun.ts",
+    "./bun/astro": "./src/bun/astro_bun.ts",
+    "./deno/vite": "./src/deno/deno.ts",
+    "./deno/astro": "./src/deno/astro_deno.ts",
+    "./node/vite": "./build/node/node.js",
+    "./node/astro": "./build/astro_node.js"
   },
   "devDependencies": {
     "@types/bun": "^1.2.15",
